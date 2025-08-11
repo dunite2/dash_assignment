@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>QR Code Generator</h2>
+<p>Generate QR codes from any text using the pyqrcode package.</p>
+
+<div class="route-section">
+    <form action="{{ url_for('generate_qr') }}" method="post">
+        <div class="form-group">
+            <label for="text_data">Text to encode in QR code:</label>
+            <textarea id="text_data" name="text_data" placeholder="Enter any text, URL, or data you want to encode..." required></textarea>
+            <small>Examples: Website URL, contact info, WiFi credentials, plain text, etc.</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="error_correction">Error Correction Level:</label>
+            <select id="error_correction" name="error_correction">
+                <option value="L">L - Low (~7% correction)</option>
+                <option value="M" selected>M - Medium (~15% correction)</option>
+                <option value="Q">Q - Quartile (~25% correction)</option>
+                <option value="H">H - High (~30% correction)</option>
+            </select>
+            <small>Higher correction levels allow the QR code to be readable even if partially damaged</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="scale">Scale (Size):</label>
+            <select id="scale" name="scale">
+                <option value="4">4 - Small</option>
+                <option value="6">6 - Medium Small</option>
+                <option value="8" selected>8 - Medium</option>
+                <option value="10">10 - Large</option>
+                <option value="12">12 - Extra Large</option>
+            </select>
+            <small>Controls the size of the generated QR code image</small>
+        </div>
+        
+        <button type="submit">Generate QR Code</button>
+    </form>
+</div>
+
+<div class="route-section">
+    <h3>About QR Codes</h3>
+    <p>QR (Quick Response) codes are two-dimensional barcodes that can store various types of data:</p>
+    <ul>
+        <li><strong>URLs:</strong> Direct links to websites</li>
+        <li><strong>Text:</strong> Plain text messages</li>
+        <li><strong>Contact Info:</strong> vCard format for adding contacts</li>
+        <li><strong>WiFi Credentials:</strong> WIFI:T:WPA;S:NetworkName;P:Password;;</li>
+        <li><strong>Email:</strong> mailto:someone@example.com</li>
+        <li><strong>Phone Numbers:</strong> tel:+1234567890</li>
+        <li><strong>SMS:</strong> sms:+1234567890</li>
+    </ul>
+    
+    <h4>Example Data Formats:</h4>
+    <div class="code-block">
+        <strong>Website:</strong> https://www.example.com<br>
+        <strong>WiFi:</strong> WIFI:T:WPA;S:MyNetwork;P:MyPassword;;<br>
+        <strong>Email:</strong> mailto:contact@example.com<br>
+        <strong>Phone:</strong> tel:+1-555-123-4567<br>
+        <strong>SMS:</strong> sms:+1-555-123-4567<br>
+        <strong>Contact:</strong> BEGIN:VCARD<br>VERSION:3.0<br>FN:John Doe<br>TEL:+1-555-123-4567<br>EMAIL:john@example.com<br>END:VCARD
+    </div>
+</div>
+
+{% endblock %}

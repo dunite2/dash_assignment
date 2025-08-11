@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welcome to the Flask Image Converter & QR Generator!</h2>
+<p>This application provides two main functionalities:</p>
+
+<div class="route-section">
+    <h3>1. Image Format Converter</h3>
+    <p><strong>Route:</strong> <code>/convert</code> (POST method)</p>
+    <p><strong>Description:</strong> Convert images from one format to another using the Pillow package.</p>
+    
+    <h4>How to use:</h4>
+    <ol>
+        <li>Select an image file (PNG, JPG, JPEG, GIF, BMP, TIFF, WEBP)</li>
+        <li>Choose the desired output format</li>
+        <li>Click "Convert Image" to download the converted file</li>
+    </ol>
+    
+    <h4>Supported Output Formats:</h4>
+    <div class="format-list">
+        {% for format in output_formats %}
+            <span class="format-tag">{{ format }}</span>
+        {% endfor %}
+    </div>
+    
+    <form action="{{ url_for('convert_image') }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="image">Select Image File:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="output_format">Output Format:</label>
+            <select id="output_format" name="output_format" required>
+                {% for format in output_formats %}
+                    <option value="{{ format }}">{{ format }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit">Convert Image</button>
+    </form>
+</div>
+
+<div class="route-section">
+    <h3>2. QR Code Generator</h3>
+    <p><strong>Route:</strong> <code>/generate_qr</code> (GET and POST methods)</p>
+    <p><strong>Description:</strong> Generate QR codes from text using the pyqrcode package.</p>
+    
+    <h4>Features:</h4>
+    <ul>
+        <li>Convert any text into a QR code</li>
+        <li>Adjustable error correction levels (L, M, Q, H)</li>
+        <li>Customizable scale/size</li>
+        <li>Downloads as PNG image</li>
+    </ul>
+    
+    <h4>Error Correction Levels:</h4>
+    <ul>
+        <li><strong>L:</strong> Low (~7% correction)</li>
+        <li><strong>M:</strong> Medium (~15% correction) - Default</li>
+        <li><strong>Q:</strong> Quartile (~25% correction)</li>
+        <li><strong>H:</strong> High (~30% correction)</li>
+    </ul>
+    
+    <p><a href="{{ url_for('generate_qr') }}" class="nav-links" style="text-decoration: none;">
+        <button>Go to QR Generator</button>
+    </a></p>
+</div>
+
+<div class="route-section">
+    <h3>API Usage Examples</h3>
+    <p>You can also use these routes programmatically:</p>
+    
+    <h4>Convert Image (POST):</h4>
+    <div class="code-block">
+        curl -X POST -F "image=@your_image.jpg" -F "output_format=PNG" http://localhost:5000/convert
+    </div>
+    
+    <h4>Generate QR Code (POST):</h4>
+    <div class="code-block">
+        curl -X POST -F "text_data=Hello World" -F "error_correction=M" -F "scale=8" http://localhost:5000/generate_qr
+    </div>
+</div>
+
+{% endblock %}
